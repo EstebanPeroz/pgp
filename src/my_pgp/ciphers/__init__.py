@@ -1,3 +1,3 @@
-from .cipher_interface import CipherInterface
+from .cipher_interface import Cipher
 
-__all__ = ["CipherInterface"]
+__all__ = ["Cipher"]
