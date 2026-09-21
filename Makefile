@@ -14,13 +14,15 @@ $(NAME): $(MAIN)
 $(VENV):
 	$(PYTHON) -m venv $(VENV)
 
-requirements-dev.txt: pyproject.toml | $(VENV)
-	$(PIP) install --group dev
-	$(PIP) freeze > requirements-dev.txt
-
-dev: requirements-dev.txt
+dev: $(VENV)
 	$(PIP) install -r requirements-dev.txt
 	$(VENV)/bin/pre-commit install
+
+lock:
+	rm -rf $(VENV)
+	$(PYTHON) -m venv $(VENV)
+	$(PIP) install --group dev
+	$(PIP) freeze > requirements-dev.txt
 
 tests: dev
 	$(VENV)/bin/python -m pytest tests
@@ -35,4 +37,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all dev tests clean fclean re
+.PHONY: all dev lock tests clean fclean re
