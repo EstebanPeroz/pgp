@@ -20,6 +20,7 @@ requirements-dev.txt: pyproject.toml | $(VENV)
 
 dev: requirements-dev.txt
 	$(PIP) install -r requirements-dev.txt
+	$(VENV)/bin/pre-commit install
 
 tests: dev
 	$(VENV)/bin/python -m pytest tests
