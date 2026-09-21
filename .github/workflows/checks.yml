@@ -20,7 +20,7 @@ jobs:
       run: make
 
     - name: Program runs without dependencies
-      run: ./my_pgp
+      run: echo "ml" | ./my_pgp xor -c 1234
 
     - name: Install dev dependencies
       run: make dev
