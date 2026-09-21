@@ -12,6 +12,7 @@ def main():
     except KeyboardInterrupt:
         sys.exit(84)
     print("Hello World!")
+    return message
 
 
 if __name__ == "__main__":
