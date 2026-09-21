@@ -5,28 +5,28 @@ MAIN   := src/my_pgp/main.py
 
 NAME := my_pgp
 
-all: init $(NAME)
+all: $(NAME)
+
+$(NAME): $(MAIN)
+	ln -sfn $(MAIN) ./$(NAME)
+	chmod +x $(NAME)
 
 $(VENV):
 	$(PYTHON) -m venv $(VENV)
 
-$(NAME): $(MAIN)
-	ln -sn $(MAIN) ./$(NAME)
-	chmod +x $(NAME)
-
-requirements.txt: pyproject.toml | $(VENV)
+requirements-dev.txt: pyproject.toml | $(VENV)
 	$(PIP) install --group dev
-	$(PIP) freeze > requirements.txt
+	$(PIP) freeze > requirements-dev.txt
 
-init: requirements.txt
-	$(PIP) install -r requirements.txt
+dev: requirements-dev.txt
+	$(PIP) install -r requirements-dev.txt
 
-tests: init
+tests: dev
 	$(VENV)/bin/python -m pytest tests
 
 clean:
 	find . -path ./$(VENV) -prune -o -type d -name __pycache__ -exec rm -rf {} +
-	rm -rf .pytest_cache *.egg-info build dist
+	rm -rf .pytest_cache .ruff_cache *.egg-info build dist
 
 fclean: clean
 	rm -rf $(VENV)
@@ -34,4 +34,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all init tests clean fclean re
+.PHONY: all dev tests clean fclean re
