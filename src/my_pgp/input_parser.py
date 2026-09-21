@@ -41,12 +41,17 @@ def read_message(args):
         except ValueError:
             sys.stderr.write("invalid hexadecimal input\n")
             sys.exit(84)
+    if args.b == True:
+        if len(args.key) >= len(data):
+            args.key = args.key[:len(data)]
+        else:
+            data = data[:len(args.key)]
     return data
 
-def check_block(args, message):
-    if not args.b or args.crypto_system == "rsa":
-        return
-    sym_key = args.key.split(":")[0] if "pgp" in args.crypto_system else args.key
-    if len(sym_key) // 2 != len(message): 
-        sys.stderr.write("with -b, key and message must be the same size\n")
-        sys.exit(84)
+# def check_block(args, message):
+#     if not args.b or args.crypto_system == "rsa":
+#         return
+#     sym_key = args.key.split(":")[0] if "pgp" in args.crypto_system else args.key
+#     if len(sym_key) // 2 != len(message): 
+#         sys.stderr.write("with -b, key and message must be the same size\n")
+#         sys.exit(84)

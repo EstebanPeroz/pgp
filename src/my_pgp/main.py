@@ -5,7 +5,7 @@ def main():
     try:
         args = input_parser()
         message = read_message(args)
-        check_block(args, message)
+        # check_block(args, message)
     except KeyboardInterrupt:
         sys.exit(84)
     print("Hello World!")
