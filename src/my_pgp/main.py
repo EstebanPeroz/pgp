@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
-from input_parser import input_parser, read_message
+
 import sys
+
+from input_parser import input_parser, read_message
+
 
 def main():
     try:
