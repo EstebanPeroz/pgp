@@ -40,7 +40,9 @@ trailing whitespace.
 | Target   | Description                                                      |
 |----------|------------------------------------------------------------------|
 | `all`    | Default. Symlinks `./my_pgp` to the program. Installs nothing    |
-| `dev`    | Creates `.venv` and installs the dev dependencies                |
+| `dev`    | Creates `.venv`, installs the locked dev dependencies and the    |
+|          | pre-commit hook                                                  |
+| `lock`   | Regenerates `requirements-dev.txt` from `pyproject.toml`         |
 | `tests`  | Runs `dev`, then the test suite with `pytest`                    |
 | `clean`  | Removes caches and build artifacts                               |
 | `fclean` | `clean`, plus removes `.venv` and `./my_pgp`                     |
@@ -50,16 +52,21 @@ Use another interpreter with `make PYTHON=/path/to/python3.14`.
 
 ## Dependencies
 
-`pyproject.toml` is the single source of truth. Dev dependencies are in the
-`dev` group of `[dependency-groups]`. `requirements-dev.txt` is a generated
-lock file with exact versions. Do not edit it by hand.
+All dev dependency versions are pinned:
 
-To add a dev dependency:
+- `pyproject.toml` pins the direct dependencies (`dev` group of
+  `[dependency-groups]`).
+- `requirements-dev.txt` is the lock file: every package, including
+  transitive ones, at an exact version. It is generated, do not edit it.
+- `make dev` only installs from `requirements-dev.txt`. It never resolves
+  new versions.
 
-1. Add it to the `dev` group in `pyproject.toml`.
-2. Run `make dev`. `requirements-dev.txt` is regenerated because
-   `pyproject.toml` changed.
-3. Commit both files.
+To add or upgrade a dev dependency:
+
+1. Change its pinned version in the `dev` group of `pyproject.toml`.
+2. Run `make lock`: it recreates `.venv` from scratch and regenerates
+   `requirements-dev.txt`.
+3. Run `make dev` and commit both files.
 
 ## Project layout
 
