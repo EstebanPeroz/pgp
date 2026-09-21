@@ -1,8 +1,13 @@
 #!/usr/bin/env python3
-from input_parser import input_parser
+from input_parser import *
 
 def main():
-    input_parser()
+    try:
+        args = input_parser()
+        message = read_message(args)
+        check_block(args, message)
+    except KeyboardInterrupt:
+        sys.exit(84)
     print("Hello World!")
 
 
