@@ -1,3 +1,4 @@
-from .cipher_interface import Cipher
+from .base import Cipher
+from .xor import Xor
 
-__all__ = ["Cipher"]
+__all__ = ["Cipher", "Xor"]
