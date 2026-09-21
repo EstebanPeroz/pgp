@@ -6,12 +6,12 @@ from input_parser import input_parser, read_message
 
 
 def main():
+    print("Hello World!")
     try:
         args = input_parser()
         message = read_message(args)
     except KeyboardInterrupt:
         sys.exit(84)
-    print("Hello World!")
     return message
 
 
