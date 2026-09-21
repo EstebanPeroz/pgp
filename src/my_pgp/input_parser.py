@@ -1,10 +1,12 @@
 import argparse
 import sys
 
+
 class MyArgumentParser(argparse.ArgumentParser):
     def error(self, message):
         sys.stderr.write(f"{self.prog}: error: {message}\n")
         sys.exit(84)
+
 
 def input_parser():
     parser = MyArgumentParser(
@@ -14,8 +16,9 @@ def input_parser():
         formatter_class=argparse.RawTextHelpFormatter,
     )
     parser.add_argument("-h", action="help")
-    parser.add_argument("crypto_system",
-                        choices=["xor", "aes", "rsa", "pgp-xor", "pgp-aes"])
+    parser.add_argument(
+        "crypto_system", choices=["xor", "aes", "rsa", "pgp-xor", "pgp-aes"]
+    )
     mode = parser.add_mutually_exclusive_group(required=True)
     mode.add_argument("-c", action="store_true")
     mode.add_argument("-d", action="store_true")
@@ -28,6 +31,7 @@ def input_parser():
     if not args.g and args.key is None:
         parser.error("a key must be provided unless -g is used")
     return args
+
 
 def read_message(args):
     if args.g:
@@ -43,15 +47,16 @@ def read_message(args):
             sys.exit(84)
     if args.b == True:
         if len(args.key) >= len(data):
-            args.key = args.key[:len(data)]
+            args.key = args.key[: len(data)]
         else:
-            data = data[:len(args.key)]
+            data = data[: len(args.key)]
     return data
+
 
 # def check_block(args, message):
 #     if not args.b or args.crypto_system == "rsa":
 #         return
 #     sym_key = args.key.split(":")[0] if "pgp" in args.crypto_system else args.key
-#     if len(sym_key) // 2 != len(message): 
+#     if len(sym_key) // 2 != len(message):
 #         sys.stderr.write("with -b, key and message must be the same size\n")
 #         sys.exit(84)

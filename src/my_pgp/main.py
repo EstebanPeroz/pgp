@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from input_parser import *
 
+
 def main():
     try:
         args = input_parser()
