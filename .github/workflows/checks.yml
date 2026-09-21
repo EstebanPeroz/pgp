@@ -16,10 +16,6 @@ jobs:
     steps:
     - uses: actions/checkout@v7
 
-    - uses: actions/setup-python@v7
-      with:
-        python-version: "3.14"
-
     - name: Build
       run: make
 
@@ -29,11 +25,8 @@ jobs:
     - name: Install dev dependencies
       run: make dev
 
-    - name: Lint
-      run: .venv/bin/ruff check --output-format github
-
-    - name: Format
-      run: .venv/bin/ruff format --check --diff
+    - name: Coding style
+      run: .venv/bin/pre-commit run --all-files --show-diff-on-failure
 
     - name: Tests
       run: make tests
