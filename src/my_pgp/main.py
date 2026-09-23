@@ -1,17 +1,25 @@
 #!/usr/bin/env python3
 
+import os
 import sys
 
-from input_parser import input_parser, read_message
+if __package__ is None or __package__ == "":
+    sys.path.insert(
+        0, os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+    )
+
+from my_pgp.core import Core
+from my_pgp.input_parser import input_parser, read_message
 
 
 def main():
-    print("Hello World!")
     try:
         args = input_parser()
         message = read_message(args)
-    except KeyboardInterrupt:
+        Core(args, message).run()
+    except Exception:
         sys.exit(84)
+
     return message
 
 
