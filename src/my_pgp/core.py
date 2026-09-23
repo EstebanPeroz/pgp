@@ -1,3 +1,5 @@
+import sys
+
 from my_pgp.ciphers.base import Cipher
 from my_pgp.ciphers.factory import CipherFactory
 
@@ -22,9 +24,8 @@ class Core:
         message: bytes = self._cipher.encrypt(self._message)
         return message.hex()
 
-    def _decrypt(self) -> str:
-        message: bytes = self._cipher.decrypt(self._message)
-        return message.decode("utf-8")
+    def _decrypt(self) -> bytes:
+        return self._cipher.decrypt(self._message)
 
     def run(self) -> None:
         if self._args.g:
@@ -33,4 +34,5 @@ class Core:
         if self._args.c:
             print(self._encrypt())
         elif self._args.d:
-            print(self._decrypt())
+            sys.stdout.buffer.write(self._decrypt())
+            sys.stdout.buffer.write(b"\n")
