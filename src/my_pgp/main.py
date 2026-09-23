@@ -17,8 +17,9 @@ def main():
         args = input_parser()
         message = read_message(args)
         Core(args, message).run()
-    except KeyboardInterrupt:
+    except Exception:
         sys.exit(84)
+
     return message
 
 

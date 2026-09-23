@@ -6,7 +6,7 @@ class Core:
     _cipher: Cipher
 
     def __init__(self, args, message) -> None:
-        if not args or not message:
+        if not args or message is None:
             raise ValueError("Arguments are needed.")
 
         self._args = args
