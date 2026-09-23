@@ -2,14 +2,15 @@
 
 import sys
 
+from core import Core
 from input_parser import input_parser, read_message
 
 
 def main():
-    print("Hello World!")
     try:
         args = input_parser()
         message = read_message(args)
+        Core(args, message).run()
     except KeyboardInterrupt:
         sys.exit(84)
     return message
