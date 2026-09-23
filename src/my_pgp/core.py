@@ -11,7 +11,6 @@ class Core:
 
         self._args = args
         self._message = message
-        print(self._args.key)
         self._cipher = CipherFactory.build(
             self._args.crypto_system, self._args.key
         )
@@ -25,7 +24,7 @@ class Core:
 
     def _decrypt(self) -> str:
         message: bytes = self._cipher.decrypt(self._message)
-        return message.hex()
+        return message.decode("utf-8")
 
     def run(self) -> None:
         if self._args.g:
