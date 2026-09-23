@@ -27,7 +27,10 @@ def input_parser():
     parser.add_argument("key", nargs="?", default=None)
     args = parser.parse_intermixed_args()
     if args.key is not None:
-        args.key = bytearray.fromhex(args.key)
+        try:
+            args.key = bytearray.fromhex(args.key)
+        except ValueError:
+            parser.error("the key must be a valid hexadecimal string")
     if args.g and args.key is not None:
         parser.error("the key argument is incompatible with -g")
     if not args.g and args.key is None:
