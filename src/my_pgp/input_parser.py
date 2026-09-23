@@ -26,6 +26,8 @@ def input_parser():
     parser.add_argument("-b", action="store_true")
     parser.add_argument("key", nargs="?", default=None)
     args = parser.parse_intermixed_args()
+    if args.key is not None:
+        args.key = bytearray.fromhex(args.key)
     if args.g and args.key is not None:
         parser.error("the key argument is incompatible with -g")
     if not args.g and args.key is None:

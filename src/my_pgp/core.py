@@ -11,8 +11,9 @@ class Core:
 
         self._args = args
         self._message = message
+        print(self._args.key)
         self._cipher = CipherFactory.build(
-            self._args.crypto_system, self._args.key.encode()
+            self._args.crypto_system, self._args.key
         )
 
     def _generate_keys(self) -> None:
