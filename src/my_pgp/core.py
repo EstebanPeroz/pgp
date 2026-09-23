@@ -1,24 +1,36 @@
+from my_pgp.ciphers.base import Cipher
+from my_pgp.ciphers.factory import CipherFactory
+
+
 class Core:
+    _cipher: Cipher
+
     def __init__(self, args, message) -> None:
         if not args or not message:
             raise ValueError("Arguments are needed.")
+
         self._args = args
         self._message = message
+        self._cipher = CipherFactory.build(
+            self._args.crypto_system, self._args.key.encode()
+        )
 
     def _generate_keys(self) -> None:
         raise NotImplementedError("Key generation is not implemented yet.")
 
-    def _encrypt(self) -> None:
-        raise NotImplementedError("Encryption is not implemented yet.")
+    def _encrypt(self) -> str:
+        message: bytes = self._cipher.encrypt(self._message)
+        return message.hex()
 
-    def _decrypt(self) -> None:
-        raise NotImplementedError("Decryption is not implemented yet.")
+    def _decrypt(self) -> str:
+        message: bytes = self._cipher.decrypt(self._message)
+        return message.hex()
 
     def run(self) -> None:
         if self._args.g:
             self._generate_keys()
             return
         if self._args.c:
-            self._encrypt()
+            print(self._encrypt())
         elif self._args.d:
-            self._decrypt()
+            print(self._decrypt())

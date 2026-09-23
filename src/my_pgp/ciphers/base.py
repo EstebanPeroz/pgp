@@ -9,6 +9,9 @@ class Cipher(ABC):
     """
 
     @abstractmethod
+    def __init__(self, key: bytes) -> None: ...
+
+    @abstractmethod
     def encrypt(self, message: bytes) -> bytes:
         """Encrypt ``message`` and return the ciphertext."""
         ...
