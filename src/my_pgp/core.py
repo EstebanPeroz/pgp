@@ -3,6 +3,7 @@ import sys
 from my_pgp.ciphers.base import Cipher
 from my_pgp.ciphers.factory import CipherFactory
 from my_pgp.ciphers.rsa import RSA
+from my_pgp.ciphers.x25519 import X25519
 
 
 class Core:
@@ -21,10 +22,16 @@ class Core:
         )
 
     def _generate_keys(self) -> None:
-        p, q = (RSA.from_hex(number) for number in self._args.g)
-        public, private = RSA.generate_keys(p, q)
-        print(f"public key: {public}")
-        print(f"private key: {private}")
+        system = self._args.crypto_system
+        if system == "rsa":
+            p, q = (RSA.from_hex(number) for number in self._args.g)
+            public, private = RSA.generate_keys(p, q)
+            print(f"public key: {public}")
+            print(f"private key: {private}")
+        elif system == "x25519":
+            X25519.generate_keys(*self._args.g)
+        else:
+            raise ValueError(f"{system} does not support key generation.")
 
     def _encrypt(self) -> str:
         message: bytes = self._cipher.encrypt(self._message)

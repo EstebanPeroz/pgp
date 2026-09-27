@@ -1,3 +1,4 @@
+import os
 from typing import override
 
 from my_pgp.ciphers.asymmetric import AsymmetricCipher, KeyPair
@@ -14,7 +15,12 @@ class X25519(AsymmetricCipher):
     @classmethod
     @override
     def generate_keys(cls, *args: str) -> KeyPair:
-        key_pair: KeyPair = KeyPair(
-            public_key=b"public_key", private_key=b"private"
-        )
-        return key_pair
+        if len(args) > 1:
+            raise ValueError("X25519 -g takes at most one argument (seed)")
+        if args:
+            seed = bytes.fromhex(args[0])
+            if len(seed) != 32:
+                raise ValueError("seed must be 32 bytes (64 hex chars)")
+        else:
+            seed = os.usrandom(32)
+            print(seed)
