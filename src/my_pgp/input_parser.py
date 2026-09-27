@@ -1,10 +1,6 @@
 import argparse
 import sys
 
-# Subject: xor and aes take a single hexadecimal number as key, while rsa
-# ("exponent-modulus") and pgp-* ("SYMMETRIC_KEY:RSA_KEY") do not.
-HEX_KEY_SYSTEMS = ("xor", "aes")
-
 
 class MyArgumentParser(argparse.ArgumentParser):
     def error(self, message):
@@ -30,7 +26,7 @@ def input_parser():
     parser.add_argument("-b", action="store_true")
     parser.add_argument("key", nargs="?", default=None)
     args = parser.parse_intermixed_args()
-    if args.key is not None and args.crypto_system in HEX_KEY_SYSTEMS:
+    if args.key is not None:
         try:
             args.key = bytearray.fromhex(args.key)
         except ValueError:
@@ -54,7 +50,7 @@ def read_message(args):
         except ValueError:
             sys.stderr.write("invalid hexadecimal input\n")
             sys.exit(84)
-    if args.b and args.crypto_system in HEX_KEY_SYSTEMS:
+    if args.b:
         if len(args.key) >= len(data):
             args.key = args.key[: len(data)]
         else:
