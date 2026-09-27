@@ -41,7 +41,7 @@ class Core:
         return self._cipher.decrypt(self._message)
 
     def run(self) -> None:
-        if self._args.g:
+        if self._args.g is not None:
             self._generate_keys()
             return
         if self._args.c:

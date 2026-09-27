@@ -17,12 +17,13 @@ def input_parser():
     )
     parser.add_argument("-h", action="help")
     parser.add_argument(
-        "crypto_system", choices=["xor", "aes", "rsa", "pgp-xor", "pgp-aes"]
+        "crypto_system",
+        choices=["xor", "aes", "rsa", "pgp-xor", "pgp-aes", "x25519"],
     )
     mode = parser.add_mutually_exclusive_group(required=True)
     mode.add_argument("-c", action="store_true")
     mode.add_argument("-d", action="store_true")
-    mode.add_argument("-g", nargs=2, metavar=("P", "Q"))
+    mode.add_argument("-g", nargs="*", metavar="PARAM")
     parser.add_argument("-b", action="store_true")
     parser.add_argument("key", nargs="?", default=None)
     args = parser.parse_intermixed_args()
@@ -36,15 +37,15 @@ def input_parser():
             args.key = bytearray.fromhex(args.key)
         except ValueError:
             parser.error("the key must be a valid hexadecimal string")
-    if args.g and args.key is not None:
+    if args.g is not None and args.key is not None:
         parser.error("the key argument is incompatible with -g")
-    if not args.g and args.key is None:
+    if args.g is None and args.key is None:
         parser.error("a key must be provided unless -g is used")
     return args
 
 
 def read_message(args):
-    if args.g:
+    if args.g is not None:
         return None
     data = sys.stdin.buffer.read()
     if data.endswith(b"\n"):
