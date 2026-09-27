@@ -26,6 +26,8 @@ def input_parser():
     parser.add_argument("-b", action="store_true")
     parser.add_argument("key", nargs="?", default=None)
     args = parser.parse_intermixed_args()
+    if args.g and args.crypto_system != "rsa":
+        parser.error("-g is only available for the rsa crypto system")
     if args.key is not None:
         try:
             args.key = bytearray.fromhex(args.key)
