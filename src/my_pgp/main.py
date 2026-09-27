@@ -17,7 +17,8 @@ def main():
         args = input_parser()
         message = read_message(args)
         Core(args, message).run()
-    except Exception:
+    except Exception as err:
+        sys.stderr.write(f"{err}\n")
         sys.exit(84)
 
     return message
