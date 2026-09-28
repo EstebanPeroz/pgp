@@ -1,10 +1,12 @@
 from my_pgp.ciphers.base import Cipher
+from my_pgp.ciphers.rsa import RSA
 from my_pgp.ciphers.xor import Xor
 
 
 class CipherFactory:
     _ciphers: dict[str, type[Cipher]] = {
         "xor": Xor,
+        "rsa": RSA,
     }
 
     @classmethod
