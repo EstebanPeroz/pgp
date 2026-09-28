@@ -108,3 +108,8 @@ def test_clamping_clears_the_high_bit_of_the_last_byte():
 def test_clamping_sets_the_second_high_bit_of_the_last_byte():
     private_key = X25519._generate_private_key(b"\x00" * 32)
     assert private_key[31] == 0b01000000
+
+
+def test_decipher_invalid_key():
+    with pytest.raises(ValueError):
+        X25519(bytes.fromhex(ALICE_PRIVATE_KEY)[:30]).decrypt(b"some_message")
