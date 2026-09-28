@@ -1,5 +1,6 @@
 import sys
 
+from my_pgp.ciphers.asymmetric import KeyPair
 from my_pgp.ciphers.base import Cipher
 from my_pgp.ciphers.factory import CipherFactory
 from my_pgp.ciphers.rsa import RSA
@@ -32,7 +33,9 @@ class Core:
             print(f"public key: {public}")
             print(f"private key: {private}")
         elif system == "x25519":
-            X25519.generate_keys(*self._args.g)
+            key_pair: KeyPair = X25519.generate_keys(*self._args.g)
+            print(f"public key: {key_pair.public_key.hex()}")
+            print(f"private key: {key_pair.private_key.hex()}")
         else:
             raise ValueError(f"{system} does not support key generation.")
 
