@@ -2,6 +2,7 @@ import os
 from typing import override
 
 from my_pgp.ciphers.asymmetric import AsymmetricCipher, KeyPair
+from my_pgp.ciphers.xor import Xor
 
 
 class X25519(AsymmetricCipher):
@@ -102,8 +103,19 @@ class X25519(AsymmetricCipher):
 
     @override
     def encrypt(self, message: bytes) -> bytes:
-        raise NotImplementedError("X25519 is not an encryption algorithm.")
+        keys = self.generate_keys()
+        shared_secret = self._scalar_mult(
+            keys.private_key, int.from_bytes(self._key, "little")
+        )
+        crypted = Xor(shared_secret).encrypt(message)
+        return keys.public_key + crypted
 
     @override
     def decrypt(self, message: bytes) -> bytes:
-        raise NotImplementedError("X25519 is not an encryption algorithm.")
+        other_public_key = message[:32]
+        crypted = message[32:]
+        shared_secret = self._scalar_mult(
+            self._key, int.from_bytes(other_public_key, "little")
+        )
+        decrypted = Xor(shared_secret).decrypt(crypted)
+        return decrypted.lstrip(b"\x00")

@@ -18,7 +18,7 @@ def input_parser():
     parser.add_argument("-h", action="help")
     parser.add_argument(
         "crypto_system",
-        choices=["xor", "aes", "rsa", "pgp-xor", "pgp-aes", "x25519"],
+        choices=["xor", "aes", "rsa", "pgp-xor", "pgp-aes", "X25519"],
     )
     mode = parser.add_mutually_exclusive_group(required=True)
     mode.add_argument("-c", action="store_true")
@@ -27,8 +27,8 @@ def input_parser():
     parser.add_argument("-b", action="store_true")
     parser.add_argument("key", nargs="?", default=None)
     args = parser.parse_intermixed_args()
-    if args.g is not None and args.crypto_system not in ("rsa", "x25519"):
-        parser.error("-g is only available for rsa and x25519")
+    if args.g is not None and args.crypto_system not in ("rsa", "X25519"):
+        parser.error("-g is only available for rsa and X25519")
     if args.key is not None and not (
         (args.c and args.crypto_system == "rsa")
         or (args.d and args.crypto_system == "rsa")

@@ -32,7 +32,7 @@ class Core:
             public, private = RSA.generate_keys(p, q)
             print(f"public key: {public}")
             print(f"private key: {private}")
-        elif system == "x25519":
+        elif system == "X25519":
             key_pair: KeyPair = X25519.generate_keys(*self._args.g)
             print(f"public key: {key_pair.public_key.hex()}")
             print(f"private key: {key_pair.private_key.hex()}")

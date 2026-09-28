@@ -8,7 +8,7 @@ class CipherFactory:
     _ciphers: dict[str, type[Cipher]] = {
         "xor": Xor,
         "rsa": RSA,
-        "x25519": X25519,
+        "X25519": X25519,
     }
 
     @classmethod
