@@ -55,6 +55,8 @@ class RSA(Cipher):
 
     @override
     def encrypt(self, message: bytes) -> bytes:
+        # a, b = message.split("-", 1)
+
         return self.to_bytes(self.__apply(int.from_bytes(message, "little")))
 
     @override
