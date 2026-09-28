@@ -16,5 +16,7 @@ class CipherFactory:
         try:
             cipher_cls = cls._ciphers[algorithm]
         except KeyError:
-            raise NotImplementedError(f"{algorithm} is not implemented yet.") from None
+            raise NotImplementedError(
+                f"{algorithm} is not implemented yet."
+            ) from None
         return cipher_cls(key)

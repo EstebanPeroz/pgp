@@ -8,15 +8,18 @@ from my_pgp.ciphers.x25519 import X25519
 
 class Core:
     _cipher: Cipher
+    _message: bytes
 
-    def __init__(self, args, message) -> None:
-        if not args or (message is None and not args.g):
+    def __init__(self, args, message: bytes | None) -> None:
+        if not args:
             raise ValueError("Arguments are needed.")
 
         self._args = args
-        self._message = message
-        if args.g:
+        if args.g is not None:
             return
+        if message is None:
+            raise ValueError("Arguments are needed.")
+        self._message = message
         self._cipher = CipherFactory.build(
             self._args.crypto_system, self._args.key
         )
