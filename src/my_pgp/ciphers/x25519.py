@@ -12,7 +12,9 @@ class X25519(AsymmetricCipher):
 
     _key: bytes
 
-    def __init__(self, key) -> None:
+    def __init__(self, key: bytes) -> None:
+        if key and len(key) != 32:
+            raise ValueError("X25519 key must be 32 bytes (64 hex chars)")
         self._key = key
 
     @classmethod

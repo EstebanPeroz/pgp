@@ -1,3 +1,5 @@
+import pytest
+
 from my_pgp.ciphers.x25519 import X25519
 
 BOB_PRIVATE_KEY = (
@@ -15,6 +17,9 @@ ALICE_PUBLIC_KEY = (
 )
 
 message = b"Hello, world!"
+tricky_message = (
+    b"Hey sir.\nHello madam.\nHow are you?\nI am fine.\nThank you.\n"
+)
 
 
 def test_generating_bob_public_key_from_private_key():
@@ -48,3 +53,58 @@ def test_shared_secret_no_precompute_key():
     alice_crypted = X25519(bob_key_pair.public_key).encrypt(message)
     bob_decrypted = X25519(bob_key_pair.private_key).decrypt(alice_crypted)
     assert bob_decrypted == message
+
+
+def test_shared_secret_with_tricky_message():
+    bob_key_pair = X25519.generate_keys()
+    alice_crypted = X25519(bob_key_pair.public_key).encrypt(tricky_message)
+    bob_decrypted = X25519(bob_key_pair.private_key).decrypt(alice_crypted)
+    assert bob_decrypted == tricky_message
+
+
+def test_generate_keys_rejects_more_than_one_argument():
+    with pytest.raises(ValueError):
+        X25519.generate_keys(BOB_PRIVATE_KEY, ALICE_PRIVATE_KEY)
+
+
+def test_generate_keys_rejects_seed_shorter_than_32_bytes():
+    with pytest.raises(ValueError):
+        X25519.generate_keys(BOB_PRIVATE_KEY[:-2])
+
+
+def test_generate_keys_rejects_seed_longer_than_32_bytes():
+    with pytest.raises(ValueError):
+        X25519.generate_keys(BOB_PRIVATE_KEY + "00")
+
+
+def test_generate_keys_with_seed_is_deterministic():
+    first = X25519.generate_keys(BOB_PRIVATE_KEY)
+    second = X25519.generate_keys(BOB_PRIVATE_KEY)
+    assert first == second
+
+
+def test_generate_keys_without_seed_are_32_bytes_each():
+    key_pair = X25519.generate_keys()
+    assert len(key_pair.public_key) == 32
+    assert len(key_pair.private_key) == 32
+
+
+def test_generate_keys_without_seed_is_random():
+    first = X25519.generate_keys()
+    second = X25519.generate_keys()
+    assert first != second
+
+
+def test_clamping_clears_the_low_three_bits_of_the_first_byte():
+    private_key = X25519._generate_private_key(b"\xff" * 32)
+    assert private_key[0] == 0b11111000
+
+
+def test_clamping_clears_the_high_bit_of_the_last_byte():
+    private_key = X25519._generate_private_key(b"\xff" * 32)
+    assert private_key[31] & 0b10000000 == 0
+
+
+def test_clamping_sets_the_second_high_bit_of_the_last_byte():
+    private_key = X25519._generate_private_key(b"\x00" * 32)
+    assert private_key[31] == 0b01000000
