@@ -28,6 +28,10 @@ class Core:
     def _generate_keys(self) -> None:
         system = self._args.crypto_system
         if system == "rsa":
+            if len(self._args.g) != 2:
+                raise ValueError(
+                    "RSA key generation requires two prime numbers."
+                )
             p, q = (RSA.from_hex(number) for number in self._args.g)
             public, private = RSA.generate_keys(p, q)
             print(f"public key: {public}")
