@@ -57,7 +57,10 @@ def read_message(args):
             sys.stderr.write("invalid hexadecimal input\n")
             sys.exit(84)
     if args.b:
-        if len(args.key) >= len(data):
+        if len(args.key) >= len(data) and args.crypto_system not in (
+            "rsa",
+            "X25519",
+        ):
             args.key = args.key[: len(data)]
         else:
             data = data[: len(args.key)]
