@@ -119,6 +119,7 @@ class Aes(Cipher):
     _nk: int
     _nr: int
     _round_keys: list[State]
+
     def __init__(self, key: bytes) -> None:
         if len(key) not in KEY_SIZES:
             raise ValueError("AES key must be 16, 24 or 32 bytes long.")
