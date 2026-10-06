@@ -1,5 +1,6 @@
 from my_pgp.ciphers.aes import Aes
 from my_pgp.ciphers.base import Cipher
+from my_pgp.ciphers.pgp import PgpAes, PgpXor
 from my_pgp.ciphers.rsa import RSA
 from my_pgp.ciphers.x25519 import X25519
 from my_pgp.ciphers.xor import Xor
@@ -11,6 +12,8 @@ class CipherFactory:
         "aes": Aes,
         "rsa": RSA,
         "X25519": X25519,
+        "pgp-xor": PgpXor,
+        "pgp-aes": PgpAes,
     }
 
     @classmethod

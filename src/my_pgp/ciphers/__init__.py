@@ -1,8 +1,18 @@
 from .aes import Aes
 from .base import Cipher
 from .factory import CipherFactory
+from .pgp import PgpAes, PgpXor
 from .rsa import RSA
 from .x25519 import X25519
 from .xor import Xor
 
-__all__ = ["RSA", "Aes", "Cipher", "CipherFactory", "X25519", "Xor"]
+__all__ = [
+    "RSA",
+    "Aes",
+    "Cipher",
+    "CipherFactory",
+    "PgpAes",
+    "PgpXor",
+    "X25519",
+    "Xor",
+]
