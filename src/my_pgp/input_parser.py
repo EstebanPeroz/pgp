@@ -1,6 +1,8 @@
 import argparse
 import sys
 
+from my_pgp.ciphers.aes import BLOCK_SIZE as AES_BLOCK_SIZE
+
 
 class MyArgumentParser(argparse.ArgumentParser):
     def error(self, message):
@@ -60,7 +62,9 @@ def read_message(args):
         "rsa",
         "X25519",
     ):
-        if len(args.key) >= len(data):
+        if args.crypto_system in ("aes", "pgp-aes"):
+            data = data[:AES_BLOCK_SIZE]
+        elif len(args.key) >= len(data):
             args.key = args.key[: len(data)]
         else:
             data = data[: len(args.key)]
