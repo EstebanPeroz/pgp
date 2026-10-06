@@ -54,3 +54,12 @@ def test_pgp_xor_decrypt_reverts_encrypt():
 def test_malformed_key_is_rejected():
     with pytest.raises(ValueError):
         PgpAes(SYMMETRIC_KEY)
+
+
+def test_pgp_aes_round_trips_key_with_zero_high_byte():
+    key = b"A" * 15 + b"\x00"
+    message = b"All men must die"
+    encrypted = PgpAes(f"{key.hex()}:{PUBLIC_KEY}").encrypt(message)
+    ciphered_key, ciphered_message = encrypted.split(b"\n")
+    cipher = PgpAes(f"{ciphered_key.decode()}:{PRIVATE_KEY}")
+    assert cipher.decrypt(bytes.fromhex(ciphered_message.decode())) == message
