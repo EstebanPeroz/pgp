@@ -10,7 +10,7 @@ from unittest.mock import patch
 
 import pytest
 
-from src.my_pgp.input_parser import input_parser
+from my_pgp.input_parser import input_parser
 
 key: str = "576861742069732064656164206d6179206e6576657220646965"
 

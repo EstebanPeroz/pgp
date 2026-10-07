@@ -3,6 +3,7 @@ import sys
 from my_pgp.ciphers.asymmetric import KeyPair
 from my_pgp.ciphers.base import Cipher
 from my_pgp.ciphers.factory import CipherFactory
+from my_pgp.ciphers.pgp import Pgp
 from my_pgp.ciphers.rsa import RSA
 from my_pgp.ciphers.x25519 import X25519
 
@@ -44,8 +45,10 @@ class Core:
             raise ValueError(f"{system} does not support key generation.")
 
     def _encrypt(self) -> str:
-        message: bytes = self._cipher.encrypt(self._message)
-        return message.hex()
+        ciphertext: bytes = self._cipher.encrypt(self._message)
+        if isinstance(self._cipher, Pgp):
+            return ciphertext.decode()
+        return ciphertext.hex()
 
     def _decrypt(self) -> bytes:
         return self._cipher.decrypt(self._message)

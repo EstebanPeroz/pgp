@@ -31,9 +31,10 @@ def input_parser():
     args = parser.parse_intermixed_args()
     if args.g is not None and args.crypto_system not in ("rsa", "X25519"):
         parser.error("-g is only available for rsa and X25519")
-    if args.key is not None and not (
-        (args.c and args.crypto_system == "rsa")
-        or (args.d and args.crypto_system == "rsa")
+    if args.key is not None and args.crypto_system not in (
+        "rsa",
+        "pgp-xor",
+        "pgp-aes",
     ):
         try:
             args.key = bytearray.fromhex(args.key)
@@ -64,6 +65,10 @@ def read_message(args):
     ):
         if args.crypto_system in ("aes", "pgp-aes"):
             data = data[:AES_BLOCK_SIZE]
+        elif args.crypto_system == "pgp-xor":
+            if args.c:
+                symmetric_key = bytes.fromhex(args.key.split(":", 1)[0])
+                data = data[: len(symmetric_key)]
         elif len(args.key) >= len(data):
             args.key = args.key[: len(data)]
         else:
