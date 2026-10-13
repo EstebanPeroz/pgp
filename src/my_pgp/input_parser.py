@@ -50,6 +50,9 @@ def input_parser():
 def read_message(args):
     if args.g is not None:
         return None
+    if sys.stdin.isatty():
+        sys.stderr.write("a message must be provided on the standard input\n")
+        sys.exit(84)
     data = sys.stdin.buffer.read()
     if data.endswith(b"\n"):
         data = data[:-1]
