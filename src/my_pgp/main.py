@@ -8,6 +8,7 @@ if __package__ is None or __package__ == "":
         0, os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
     )
 
+from my_pgp.ciphers.factory import CipherFactory
 from my_pgp.core import Core
 from my_pgp.input_parser import input_parser, read_message
 
@@ -15,6 +16,8 @@ from my_pgp.input_parser import input_parser, read_message
 def main():
     try:
         args = input_parser()
+        if args.g is None:
+            CipherFactory.build(args.crypto_system, args.key)
         message = read_message(args)
         Core(args, message).run()
     except Exception as err:
